@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Main\IndexController;
 use App\Http\Controllers\Main\MainIndexController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,8 +15,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', MainIndexController::class);
+Route::group(['namespace' => 'App\Http\Controllers\Main'], function(){
+    Route::get('/', MainIndexController::class);
+});
 
+Route::group(['namespace' => 'App\Http\Controllers\Admin\Main', 'prefix' => 'admin'], function(){
+    Route::get('/', IndexController::class);
+});
 // Auth::routes();
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
