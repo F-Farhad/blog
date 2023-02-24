@@ -11,8 +11,8 @@
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Dashboard v1</li>
+              <li class="breadcrumb-item"><a href="{{route('admin.category.index')}}">Home</a></li>
+              <li class="breadcrumb-item active">Добавление категории</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -26,9 +26,13 @@
         <!-- Small boxes (Stat box) -->
         <div class="row">
 
-          <form action="#" class="w-25">
+          <form action="{{route('admin.category.store')}}" class="w-25" method="post">
+            @csrf
             <div class="form-group">
-              <input type="text" class="form-control" placeholder="Название категории">
+              <input type="text" name="title" class="form-control" placeholder="Название категории">
+              <div class="text-danger">
+                {{$errors->first('title')}}
+              </div>
             </div>
             
             <input type="submit" class="btn btn-primary" value="Добавить">
