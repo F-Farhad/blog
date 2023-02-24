@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\Main\IndexController;
-use App\Http\Controllers\Main\MainIndexController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,13 +13,28 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['namespace' => 'App\Http\Controllers\Main'], function(){
-    Route::get('/', MainIndexController::class);
-});
 
-Route::group(['namespace' => 'App\Http\Controllers\Admin\Main', 'prefix' => 'admin'], function(){
+Route::namespace('\App\Http\Controllers\Main')->group(function(){
     Route::get('/', IndexController::class);
 });
+
+Route::namespace('\App\Http\Controllers\Admin')->prefix('admin')->group(function(){
+     Route::namespace('Main')->group(function(){
+         Route::get('/', IndexController::class);
+     }); 
+
+     Route::namespace('Category')->prefix('categories')->group(function(){
+        Route::get('/', IndexController::class)->name('admin.category.index');
+        Route::get('/create', CreateController::class)->name('admin.category.create');
+     });
+});
+
+
+
+    // Route::group(['namespace' => 'App\Http\Controllers\Admin\Category', 'prefix'=>'categories'], function(){
+        
+    // });
+
 // Auth::routes();
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
