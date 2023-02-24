@@ -28,6 +28,8 @@ Route::namespace('\App\Http\Controllers\Admin')->prefix('admin')->group(function
         Route::get('/create', CreateController::class)->name('admin.category.create');
         Route::post('/', StoreController::class)->name('admin.category.store');
         Route::get('/{category}', ShowController::class)->name('admin.category.show');
+        Route::get('/{category}/edit', EditController::class)->name('admin.category.edit');
+        Route::patch('/{category}', UpdateController::class)->name('admin.category.update');
      });
 });
 
