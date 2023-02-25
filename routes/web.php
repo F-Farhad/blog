@@ -20,7 +20,7 @@ Route::namespace('\App\Http\Controllers\Main')->group(function(){
 
 Route::namespace('\App\Http\Controllers\Admin')->prefix('admin')->group(function(){
      Route::namespace('Main')->group(function(){
-         Route::get('/', IndexController::class);
+         Route::get('/', IndexController::class)->name('admin.index');
      }); 
 
      Route::namespace('Category')->prefix('categories')->group(function(){
