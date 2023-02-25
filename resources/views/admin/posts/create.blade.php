@@ -77,11 +77,22 @@
               <label>Выберите категорию</label>
               <select class="form-control" name="category_id">
                 @foreach($categories as $category)
-                  <option 
-                    {{$category->id == old('category_id')?' selected':''}}
-                  value="{{$category->id}}">{{$category->title}}</option>
+                  <option {{$category->id == old('category_id')? 'selected':''}}
+                    value="{{$category->id}}">{{$category->title}}
+                </option>
                 @endforeach
               </select>
+            </div>
+
+            <div class="form-group">
+                  <label>Теги</label>
+                  <select class="select2" name="tag_ids[]" multiple="multiple" data-placeholder="Выберите теги" style="width: 100%;">
+                  @foreach($tags as $tag)
+                    <option 
+                    {{ is_array(old('tag_ids')) && in_array($tag->id, old('tag_ids'))? 'selected':''}}
+                    value="{{$tag->id}}">{{$tag->title}}</option>
+                  @endforeach
+                  </select>
             </div>
 
             <div class="form-group">

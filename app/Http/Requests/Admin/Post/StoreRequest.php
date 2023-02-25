@@ -26,8 +26,9 @@ class StoreRequest extends FormRequest
             "content" => "required|string",
             "preview_image" => "required|file",
             "main_image" => "required|file",
-            "category_id" => "required|exists:categories,id"   //exists проверяет что бы category_id 
-                                                            // в таблице категорий реально существовало
+            "category_id" => "required|integer|exists:categories,id",//exists проверяет что бы category_id в таблице категорий реально существовало
+            "tag_ids" => "nullable|array",
+            "tag_ids.*" => "nullable|integer|exists:tags,id" //.* означает что весь массив должен быть сопаставлен со значениями в таблице tags
         ];
     }
 }
