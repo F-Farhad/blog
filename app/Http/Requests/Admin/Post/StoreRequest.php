@@ -23,6 +23,11 @@ class StoreRequest extends FormRequest
     {
         return [
             "title" => "required|string",
+            "content" => "required|string",
+            "preview_image" => "required|file",
+            "main_image" => "required|file",
+            "category_id" => "required|exists:categories,id"   //exists проверяет что бы category_id 
+                                                            // в таблице категорий реально существовало
         ];
     }
 }
