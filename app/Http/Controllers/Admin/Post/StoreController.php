@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Category;
+namespace App\Http\Controllers\Admin\Post;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Category\StoreRequest;
+use App\Http\Requests\Admin\Post\StoreRequest;
 use App\Models\Category;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class StoreController extends Controller
@@ -15,7 +16,7 @@ class StoreController extends Controller
     public function __invoke(StoreRequest $request)
     {
         $data = $request->validated();
-        Category::firstOrCreate($data); //создаем новую категорию или возвращаем если уже есть. То есть заботимся о том что бы
+        Post::firstOrCreate($data); //создаем новую категорию или возвращаем если уже есть. То есть заботимся о том что бы
                                         //имена были уникальнымиS
 
                                         //Так выглядит полная работа данного метода с указанием 2 массивов
@@ -24,6 +25,6 @@ class StoreController extends Controller
             // существующий в бд. Во втором массиве указываются все атрибуты по которым будет создана запись в бд, указывается обязательно
             // https://www.youtube.com/watch?v=FMpJ8-5pnUQ&list=PLd2_Os8Cj3t8StX6GztbdMIUXmgPuingB&index=8
             // 5 минута
-        return redirect()->route('admin.categories.index');
+        return redirect()->route('admin.posts.index');
     }
 }
