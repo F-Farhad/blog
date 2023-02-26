@@ -23,6 +23,12 @@ class UpdateRequest extends FormRequest
     {
         return [
             "title" => "required|string",
+            "content" => "required|string",
+            "preview_image" => "nullable|file",
+            "main_image" => "nullable|file",
+            "category_id" => "required|integer|exists:categories,id",//exists проверяет что бы category_id в таблице категорий реально существовало
+            "tag_ids" => "nullable|array",
+            "tag_ids.*" => "nullable|integer|exists:tags,id" //.* означает что весь массив должен быть сопаставлен со значениями в таблице tags
         ];
     }
 }

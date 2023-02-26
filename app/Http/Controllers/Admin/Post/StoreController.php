@@ -19,10 +19,10 @@ class StoreController extends Controller
     {
         try{
             $data = $request->validated();
-            $tag_ids = $data['tag_ids'];
-            unset($data['tag_ids']);
-            $data['preview_image'] = Storage::put('/images', $data['preview_image']);   //https://www.youtube.com/watch?v=oCwP0PsHmUk&list=PLd2_Os8Cj3t8StX6GztbdMIUXmgPuingB&index=17
-            $data['main_image'] = Storage::put('/images', $data['main_image']);
+            $tag_ids = $data['tag_ids'];                                                                        //https://www.youtube.com/watch?v=YfqXlvFtgIk&list=PLd2_Os8Cj3t8StX6GztbdMIUXmgPuingB&index=21
+            unset($data['tag_ids']);                    //сохранять картинки следует в папку storage/public, после данную папку следует расшарить в папку public, для этого создается ссылка на папку storage php artisan storage:link 
+            $data['preview_image'] = Storage::disk('public')->put('/images', $data['preview_image']);   //https://www.youtube.com/watch?v=oCwP0PsHmUk&list=PLd2_Os8Cj3t8StX6GztbdMIUXmgPuingB&index=17
+            $data['main_image'] = Storage::disk('public')->put('/images', $data['main_image']);
             $post = Post::firstOrCreate($data); //создаем новую категорию или возвращаем если уже есть. То есть заботимся о том что бы
                                             //имена были уникальными
             $post->tags()->attach($tag_ids);
