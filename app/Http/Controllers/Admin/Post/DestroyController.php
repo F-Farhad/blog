@@ -7,7 +7,7 @@ use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
-class DestroyController extends Controller
+class DestroyController extends BaseController
 {
     /**
      * Handle the incoming request.
