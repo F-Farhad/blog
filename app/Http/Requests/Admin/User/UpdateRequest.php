@@ -23,7 +23,9 @@ class UpdateRequest extends FormRequest
     {
         return [
             "name" => "required|string",
-            "email" => "required|string|email|unique:users",
+            "email" => "required|string|email|unique:users,email," . $this->user_id,    //проблема с редактированием пользователя, почта уникальна, поэтому следует дописать
+            "user_id" => "required|integer|exists:users,id",            //дополнительную проверку 10 минута https://www.youtube.com/watch?v=SUxYdPkdAX0&list=PLd2_Os8Cj3t8StX6GztbdMIUXmgPuingB&index=26
+            "role" => "required|integer",
         ];
     }
 
@@ -33,6 +35,7 @@ class UpdateRequest extends FormRequest
             'name.required' => 'Это поле необходимо заполнить',
             'name.string' => 'Это поле должно быть строковым',
             'email.unique' => 'Данный email занят',
+            'role.required' => 'Это поле необходимо заполнить',
         ];
     }
 }
