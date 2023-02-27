@@ -12,13 +12,19 @@ class PostService{
     public function store($data){
         try{
             DB::beginTransaction();
-            $tag_ids = $data['tag_ids'];                                                                        //https://www.youtube.com/watch?v=YfqXlvFtgIk&list=PLd2_Os8Cj3t8StX6GztbdMIUXmgPuingB&index=21
-            unset($data['tag_ids']);                    //сохранять картинки следует в папку storage/public, после данную папку следует расшарить в папку public, для этого создается ссылка на папку storage php artisan storage:link 
+            if(isset($data['tag_ids'])){        //из-за того что разрешаем создавать пост без тегов, проверяем имеются ли они, перед тем как создавать,
+                $tag_ids = $data['tag_ids'];                                                                                //иначе вылезет 500 ошибка
+                unset($data['tag_ids']);
+            }
+                                                                                    //https://www.youtube.com/watch?v=YfqXlvFtgIk&list=PLd2_Os8Cj3t8StX6GztbdMIUXmgPuingB&index=21
+                                //сохранять картинки следует в папку storage/public, после данную папку следует расшарить в папку public, для этого создается ссылка на папку storage php artisan storage:link 
             $data['preview_image'] = Storage::disk('public')->put('/images', $data['preview_image']);   //https://www.youtube.com/watch?v=oCwP0PsHmUk&list=PLd2_Os8Cj3t8StX6GztbdMIUXmgPuingB&index=17
             $data['main_image'] = Storage::disk('public')->put('/images', $data['main_image']);
             $post = Post::firstOrCreate($data); //создаем новую категорию или возвращаем если уже есть. То есть заботимся о том что бы
                                             //имена были уникальными
-            $post->tags()->attach($tag_ids);
+            if(isset($tag_ids)){
+                $post->tags()->attach($tag_ids);
+            }
                                             //Так выглядит полная работа данного метода с указанием 2 массивов
             //$category = Category::firstOrCreate(['title' => $data['title']], ['title' => $data['title']]);
                 // Первый массив определяет по каким ключам стоит проверять уникальность. Если title не уникален, то он вернет, обьект
@@ -35,8 +41,10 @@ class PostService{
     public function update($data, $post){
         try{    
             DB::beginTransaction();         //начинаем транзакцию
-            $tag_ids = $data['tag_ids'];                                                                        //https://www.youtube.com/watch?v=YfqXlvFtgIk&list=PLd2_Os8Cj3t8StX6GztbdMIUXmgPuingB&index=21
-            unset($data['tag_ids']);   
+            if(isset($data['tag_ids'])){                //из-за того что разрешаем создавать пост без тегов, проверяем имеются ли они, перед тем как создавать,
+                $tag_ids = $data['tag_ids'];                                                                        //https://www.youtube.com/watch?v=YfqXlvFtgIk&list=PLd2_Os8Cj3t8StX6GztbdMIUXmgPuingB&index=21
+                unset($data['tag_ids']);   
+            }
             
             if(isset($data['preview_image'])){ //сохранять картинки следует в папку storage/public, после данную папку следует расшарить в папку public, для этого создается ссылка на папку storage php artisan storage:link 
                 $data['preview_image'] = Storage::disk('public')->put('/images', $data['preview_image']);   //https://www.youtube.com/watch?v=oCwP0PsHmUk&list=PLd2_Os8Cj3t8StX6GztbdMIUXmgPuingB&index=17
@@ -45,8 +53,10 @@ class PostService{
                 $data['main_image'] = Storage::disk('public')->put('/images', $data['main_image']);
             }
             $post->update($data);
-            $post->tags()->sync($tag_ids);  //метод sync удаляет все привязки которые есть у модели и создает новые, которые ему передают
-            
+
+            if(isset($tag_ids)){
+                $post->tags()->sync($tag_ids);  //метод sync удаляет все привязки которые есть у модели и создает новые, которые ему передают
+            }
             DB::commit();       //если все хорошо комитем ее
             return $post;
         }catch(Exception $exception){

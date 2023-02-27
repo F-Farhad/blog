@@ -24,6 +24,6 @@ class StoreController extends Controller
             // существующий в бд. Во втором массиве указываются все атрибуты по которым будет создана запись в бд, указывается обязательно
             // https://www.youtube.com/watch?v=FMpJ8-5pnUQ&list=PLd2_Os8Cj3t8StX6GztbdMIUXmgPuingB&index=8
             // 5 минута
-        return redirect()->route('admin.categories.index');
+        return redirect()->route('admin.category.index');
     }
 }
