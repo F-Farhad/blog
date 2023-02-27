@@ -18,7 +18,7 @@ Route::namespace('\App\Http\Controllers\Main')->group(function(){
     Route::get('/', IndexController::class);
 });
 
-Route::namespace('\App\Http\Controllers\Admin')->prefix('admin')->group(function(){
+Route::namespace('\App\Http\Controllers\Admin')->prefix('admin')->middleware('auth','admin')->group(function(){
      Route::namespace('Main')->group(function(){
          Route::get('/', IndexController::class)->name('admin.index');
      }); 
@@ -70,6 +70,6 @@ Route::namespace('\App\Http\Controllers\Admin')->prefix('admin')->group(function
         
     // });
 
-// Auth::routes();
+ Auth::routes();
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -13,7 +13,7 @@ class PostService{
         try{
             DB::beginTransaction();
             if(isset($data['tag_ids'])){        //из-за того что разрешаем создавать пост без тегов, проверяем имеются ли они, перед тем как создавать,
-                $tag_ids = $data['tag_ids'];                                                                                //иначе вылезет 500 ошибка
+                $tag_ids = $data['tag_ids'];                                                        //иначе вылезет 500 ошибка
                 unset($data['tag_ids']);
             }
                                                                                     //https://www.youtube.com/watch?v=YfqXlvFtgIk&list=PLd2_Os8Cj3t8StX6GztbdMIUXmgPuingB&index=21
@@ -22,15 +22,16 @@ class PostService{
             $data['main_image'] = Storage::disk('public')->put('/images', $data['main_image']);
             $post = Post::firstOrCreate($data); //создаем новую категорию или возвращаем если уже есть. То есть заботимся о том что бы
                                             //имена были уникальными
-            if(isset($tag_ids)){
-                $post->tags()->attach($tag_ids);
-            }
                                             //Так выглядит полная работа данного метода с указанием 2 массивов
             //$category = Category::firstOrCreate(['title' => $data['title']], ['title' => $data['title']]);
                 // Первый массив определяет по каким ключам стоит проверять уникальность. Если title не уникален, то он вернет, обьект
                 // существующий в бд. Во втором массиве указываются все атрибуты по которым будет создана запись в бд, указывается обязательно
                 // https://www.youtube.com/watch?v=FMpJ8-5pnUQ&list=PLd2_Os8Cj3t8StX6GztbdMIUXmgPuingB&index=8
                 // 5 минута
+
+            if(isset($tag_ids)){
+                $post->tags()->attach($tag_ids);
+            }
             DB::commit();
         }catch(Exception $exception){
             DB::rollBack();
@@ -42,7 +43,7 @@ class PostService{
         try{    
             DB::beginTransaction();         //начинаем транзакцию
             if(isset($data['tag_ids'])){                //из-за того что разрешаем создавать пост без тегов, проверяем имеются ли они, перед тем как создавать,
-                $tag_ids = $data['tag_ids'];                                                                        //https://www.youtube.com/watch?v=YfqXlvFtgIk&list=PLd2_Os8Cj3t8StX6GztbdMIUXmgPuingB&index=21
+                $tag_ids = $data['tag_ids'];                    //https://www.youtube.com/watch?v=YfqXlvFtgIk&list=PLd2_Os8Cj3t8StX6GztbdMIUXmgPuingB&index=21
                 unset($data['tag_ids']);   
             }
             
