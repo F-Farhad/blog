@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\User\StoreRequest;
+use App\Jobs\StoreUserJob;
 use App\Mail\User\PasswordMail;
 use App\Models\Category;
 use App\Models\User;
@@ -22,22 +23,7 @@ class StoreController extends Controller
     public function __invoke(StoreRequest $request)
     {
         $data = $request->validated();
-        $password = Str::random(10);
-        $data['password'] = Hash::make($password);
-        $user = User::firstOrCreate(['email'=> $data['email']], $data); //создаем нового пользователя или возвращаем если уже есть. То есть заботимся о том что бы
-                                                                    //пользователи были уникальными
-                                        //Так выглядит полная работа данного метода с указанием 2 массивов
-        //$category = Category::firstOrCreate(['title' => $data['title']], ['title' => $data['title']]);
-            // Первый массив определяем по каким ключам стоит проверять уникальность. Если title не уникален, то он вернет, обьект
-            // существующий в бд. Во втором массиве указываются все атрибуты по которым будет создана запись в бд, указывается обязательно
-            // https://www.youtube.com/watch?v=FMpJ8-5pnUQ&list=PLd2_Os8Cj3t8StX6GztbdMIUXmgPuingB&index=8
-            // 5 минута
-        
-        Mail::to($data['email'])->send(new PasswordMail($password));    //работа с почтой https://www.youtube.com/watch?v=sGY35rfCSbA&list=PLd2_Os8Cj3t8StX6GztbdMIUXmgPuingB&index=28
-        
-        event(new Registered($user)); //данный метод служит в ситуации когда админ создает руками пользователя, он нужен для того что бы
-                                //было отправлено письмо с паролеме и подтвержением почты 
-                                //3:00 https://www.youtube.com/watch?v=njFqr4Si6H4&list=PLd2_Os8Cj3t8StX6GztbdMIUXmgPuingB&index=29
+        StoreUserJob::dispatch($data);
         return redirect()->route('admin.user.index');
     }
 }
