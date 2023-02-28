@@ -8,6 +8,7 @@ use App\Mail\User\PasswordMail;
 use App\Models\Category;
 use App\Models\User;
 use Dflydev\DotAccessData\Data;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -23,7 +24,7 @@ class StoreController extends Controller
         $data = $request->validated();
         $password = Str::random(10);
         $data['password'] = Hash::make($password);
-        User::firstOrCreate(['email'=> $data['email']], $data); //создаем нового пользователя или возвращаем если уже есть. То есть заботимся о том что бы
+        $user = User::firstOrCreate(['email'=> $data['email']], $data); //создаем нового пользователя или возвращаем если уже есть. То есть заботимся о том что бы
                                                                     //пользователи были уникальными
                                         //Так выглядит полная работа данного метода с указанием 2 массивов
         //$category = Category::firstOrCreate(['title' => $data['title']], ['title' => $data['title']]);
@@ -32,7 +33,11 @@ class StoreController extends Controller
             // https://www.youtube.com/watch?v=FMpJ8-5pnUQ&list=PLd2_Os8Cj3t8StX6GztbdMIUXmgPuingB&index=8
             // 5 минута
         
-        Mail::to($data['email'])->send(new PasswordMail($password));
+        Mail::to($data['email'])->send(new PasswordMail($password));    //работа с почтой https://www.youtube.com/watch?v=sGY35rfCSbA&list=PLd2_Os8Cj3t8StX6GztbdMIUXmgPuingB&index=28
+        
+        event(new Registered($user)); //данный метод служит в ситуации когда админ создает руками пользователя, он нужен для того что бы
+                                //было отправлено письмо с паролеме и подтвержением почты 
+                                //3:00 https://www.youtube.com/watch?v=njFqr4Si6H4&list=PLd2_Os8Cj3t8StX6GztbdMIUXmgPuingB&index=29
         return redirect()->route('admin.user.index');
     }
 }
