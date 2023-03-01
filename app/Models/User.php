@@ -61,4 +61,12 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new SendVerifyWithQueueNotification());
     }
+
+    /**
+     * Если связующая таблица идет не стандартная, т.е. не по правилам Laravel, в это случае она указывается вторым аргументам, 
+     * 3 и 4 аргумент уточняет по каким полям свзывать posts и users(проверял работает и без них, но указывать не стандартную табилцу обязательно иначе он будет искать post_user)
+     */
+    public function likedPosts(){   
+        return $this->belongsToMany(Post::class, 'post_user_likes', 'user_id', 'post_id');
+    }
 }
