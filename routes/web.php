@@ -31,6 +31,9 @@ Route::namespace('\App\Http\Controllers\Personal')->prefix('personal')->middlewa
 
    Route::namespace('Comment')->prefix('comment')->group(function(){
       Route::get('/', IndexController::class)->name('personal.comment.index');
+      Route::get('/{comment}/edit', EditController::class)->name('personal.comment.edit');
+      Route::patch('/{comment}', UpdateController::class)->name('personal.comment.update');
+      Route::delete('/{comment}', DestroyController::class)->name('personal.comment.destroy');
    });
 });
 

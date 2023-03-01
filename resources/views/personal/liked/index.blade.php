@@ -25,6 +25,7 @@
       <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
         <div class="row">
+
           <div class="col-6">
               <div class="card">
                 <div class="card-body table-responsive p-0">
@@ -58,6 +59,7 @@
                 </div>
               </div>
           </div>
+          
         </div>
         <!-- /.row -->
         
