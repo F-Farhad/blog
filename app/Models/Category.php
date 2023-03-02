@@ -15,4 +15,5 @@ class Category extends Model
 
     //разрешаем изменять данные в таблице
     protected $guarded = false;
+
 }
