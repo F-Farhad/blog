@@ -22,6 +22,10 @@ Route::namespace('\App\Http\Controllers\Main')->group(function(){
 Route::namespace('\App\Http\Controllers\Post')->prefix('posts')->group(function(){
    Route::get('/', IndexController::class)->name('post.index');
    Route::get('/{post}', ShowController::class)->name('post.show');
+
+   Route::namespace('Comment')->prefix('/{post}/comments')->group(function(){
+      Route::post('/', StoreController::class)->name('post.comment.store');
+   });
 });
 
 Route::namespace('\App\Http\Controllers\Personal')->prefix('personal')->middleware('auth','admin')->group(function(){

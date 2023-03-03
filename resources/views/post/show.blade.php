@@ -21,45 +21,50 @@
                     <section class="related-posts">
                         <h2 class="section-title mb-4" data-aos="fade-up">Related Posts</h2>
                         <div class="row">
-                            @foreach($relatedPost as $post)
+                            @foreach($relatedPost as $postRel)
                             <div class="col-md-4" data-aos="fade-right" data-aos-delay="100">
-                                <img src="{{ asset('storage/' . $post->preview_image) }}" alt="related post" class="post-thumbnail">
-                                <p class="post-category">{{ $post->category->title }}</p>
-                                <a href="{{ route('post.show', $post->id) }}"><h5 class="post-title">{{ $post->title }}</h5></a>
+                                <img src="{{ asset('storage/' . $postRel->preview_image) }}" alt="related post" class="post-thumbnail">
+                                <p class="post-category">{{ $postRel->category->title }}</p>
+                                <a href="{{ route('post.show', $postRel->id) }}"><h5 class="post-title">{{ $postRel->title }}</h5></a>
                             </div>
                             @endforeach
                         </div>
                     </section>
+                    <section class="comment-list">
+                    <h2 class="section-title mb-3" data-aos="fade-up">Комментарии к посту {{ $post->comments->count() }}</h2>
+                        @foreach($post->comments as $comment)
+                        <div class="comment-text mb-3">
+                            <span class="username">
+                                <div>
+                                    {{ $comment->user->name }}
+                                </div>
+                            <span class="text-muted float-right">{{ $comment->DateAsCarbon->diffForHumans() }}</span>
+                            </span>
+                                    {{ $comment->message }}
+                        </div>
+                        @endforeach
+                    </section>
+
+                    @auth   <!-- Данная директива отображает форму для комментариев только для вошедших пользователей -->
                     <section class="comment-section">
-                        <h2 class="section-title mb-5" data-aos="fade-up">Leave a Reply</h2>
-                        <form action="/" method="post">
+                        <h2 class="section-title mb-2" data-aos="fade-up">Оставить комметарий</h2>
+                        <form action="{{ route('post.comment.store', $post->id) }}" method="post">
+                            @csrf
                             <div class="row">
                                 <div class="form-group col-12" data-aos="fade-up">
-                                <label for="comment" class="sr-only">Comment</label>
-                                <textarea name="comment" id="comment" class="form-control" placeholder="Comment" rows="10">Comment</textarea>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-4" data-aos="fade-right">
-                                    <label for="name" class="sr-only">Name</label>
-                                    <input type="text" name="name" id="name" class="form-control" placeholder="Name*">
-                                </div>
-                                <div class="form-group col-md-4" data-aos="fade-up">
-                                    <label for="email" class="sr-only">Email</label>
-                                    <input type="email" name="email" id="email" class="form-control" placeholder="Email*" required>
-                                </div>
-                                <div class="form-group col-md-4" data-aos="fade-left">
-                                    <label for="website" class="sr-only">Website</label>
-                                    <input type="url" name="website" id="website" class="form-control" placeholder="Website*">
+                                <label for="message" class="sr-only">Комментарий</label>
+                                <textarea name="message" id="comment" class="form-control" placeholder="Комментарий" rows="10"></textarea>
+                                <input type="hidden" name="post_id" value="{{$post->id}}">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-12" data-aos="fade-up">
-                                    <input type="submit" value="Send Message" class="btn btn-warning">
+                                    <input type="submit" value="Отправить комметарий" class="btn btn-warning">
                                 </div>
                             </div>
                         </form>
                     </section>
+                    @endauth
                 </div>
             </div>
         </div>
