@@ -19,6 +19,11 @@ Route::namespace('\App\Http\Controllers\Main')->group(function(){
     Route::get('/', IndexController::class)->name('main.index');
 });
 
+Route::namespace('\App\Http\Controllers\Post')->prefix('posts')->group(function(){
+   Route::get('/', IndexController::class)->name('post.index');
+   Route::get('/{post}', ShowController::class)->name('post.show');
+});
+
 Route::namespace('\App\Http\Controllers\Personal')->prefix('personal')->middleware('auth','admin')->group(function(){
    Route::namespace('Main')->group(function(){
       Route::get('/', IndexController::class)->name('personal.main.index');
