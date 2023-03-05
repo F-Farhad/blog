@@ -18,8 +18,32 @@
             </section>
             <div class="row">
                 <div class="col-lg-9 mx-auto">
+
+                    @auth
+                    <section class="py-3">
+                        <form action="{{ route('post.like.store', $post->id) }}" method="post">
+                            @csrf
+                                <span>{{ $post->liked_users_count }}</span>
+                                <button type="submit" class="border-0 bg-transparent">
+                                    @if(auth()->user()->likedPosts->contains($post->id))
+                                        <i class="fas fa-heart"></i> <!-- like -->
+                                    @else
+                                        <i class="far fa-heart"></i>    
+                                    @endif
+                                </button>
+                        </form>
+                    </section>
+                @endauth
+                @guest()
+                <section>
+                    <span>{{ $post->liked_users_count }}</span>
+                    <i class="far fa-heart"></i>    
+                </section>
+                @endguest
+
+                @if($relatedPost->count() > 0)
                     <section class="related-posts">
-                        <h2 class="section-title mb-4" data-aos="fade-up">Related Posts</h2>
+                        <h2 class="section-title mb-4" data-aos="fade-up">Схожие посты</h2>
                         <div class="row">
                             @foreach($relatedPost as $postRel)
                             <div class="col-md-4" data-aos="fade-right" data-aos-delay="100">
@@ -30,6 +54,8 @@
                             @endforeach
                         </div>
                     </section>
+                @endif
+
                     <section class="comment-list">
                     <h2 class="section-title mb-3" data-aos="fade-up">Комментарии к посту {{ $post->comments->count() }}</h2>
                         @foreach($post->comments as $comment)

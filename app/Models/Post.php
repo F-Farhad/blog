@@ -17,6 +17,9 @@ class Post extends Model
     //разрешаем изменять данные в таблице
     protected $guarded = false;
 
+    //поле для подсчитывания колличества лайков
+    protected $withCount = ['likedUsers'];
+
     public function tags(){
         return $this->belongsToMany(Tag::class);
     }
